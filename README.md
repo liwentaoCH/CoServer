@@ -25,11 +25,7 @@ SYLAR_LOG_FMT_INFO(g_logger, "%s", "this is a log");
 
 ### Util与Marco模块
 
-工具接口与工具类，功能宏定义。包括获取时间，日期时间格式转换，栈回溯，文件系统操作接口，类型转换接口，以及SYLAR_ASSERT宏。详细接口参考util.h，macro.h。
-
-### 环境变量模块
-
-提供管理环境变量管理功能，包括系统环境变量，自定义环境变量，命令行参数，帮助信息，exe名称与程序路径相关的信息。环境变量全部以key-value的形式进行存储，key和value都是字符串格式。提供add/get/has/del接口用于操作自定义环境变量和命令行选项与参数，提供setEnv/getEnv用于操作系统环境变量，提供addHelp/removeHelp/printHelp用于操作帮忙信息，提供getExe/getCwd用于获取程序名称及程序路径，提供getAbsolutePath/getAbsoluteWorkPath/getConfigPath用于获取路径相关的信息。
+工具接口与工具类，功能宏定义。包括获取时间，日期时间格式转换，栈回溯等，以及SYLAR_ASSERT宏。详细接口参考util.h，macro.h。
 
 
 ### 配置模块
