@@ -110,3 +110,35 @@ getsockopt
 setsockopt
 ```
 
+## **Example-TinyHttpServer**
+---
+基于上述高性能框架，实现一个简易**httpServer**——支持访问服务器数据库实现web端用户注册、登录功能，可以请求服务器图片和视频文件。  
+服务器启动函数如下所示：  
+```
+void run() {
+    sylar::http::HttpServer::ptr server(new sylar::http::HttpServer);
+    sylar::Address::ptr addr = sylar::Address::LookupAnyIPAddress("0.0.0.0:8020");
+    while(!server->bind(addr)) {
+        sleep(2);
+    }
+    auto sd = server->getServletDispatch();
+    
+    sd->addServlet("/sylar", func_1); // func_1返回初始界面
+    sd->addServlet("/sylar/register", func_2); // func_2返回注册界面
+    sd->addServlet("/sylar/log", func_3); // func_3返回登录界面
+    sd->addServlet("/check_register", func_4); // func_4 处理用户注册请求
+    sd->addServlet("/check_log", func_5); // func_5 处理用户登录请求
+    sd->addServlet("/picture/1", func_6); // func_6处理请求服务器图片请求
+    sd->addServlet("/video/1", func_7); // func_7处理请求服务器视频文件请求
+
+    sd->addGlobServlet("/*", func_1);
+
+    server->start();
+}
+```
+### Demo演示  
+
+
+
+
+
