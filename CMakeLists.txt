@@ -7,9 +7,9 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -g -std=c++11 -Wall -Wno-deprecated -Werror 
 
 include_directories(.)
 include_directories(/usr/local/include)
-
+# 指定将要生成的libsylar与系统libmysql路径
 link_directories(/disk2/WebServer/sylar/lib 
-                 /usr/lib64/mysql) # . link_directories()    target_link_libraries() 组合拳
+                 /usr/lib64/mysql) 
 
 set(LIB_SRC
     src/log.cc
@@ -55,6 +55,7 @@ add_executable(http_server /disk2/WebServer/sylar/example/http_server.cc)
 add_dependencies(http_server sylar)        #提醒test可执行文件的生成 需要sylar.so中的符号定义，所以先生存sylar.so
 target_link_libraries(http_server ${LIB_LIB})
 
-
+# 指定生成的可执行文件路径
 SET(EXECUTABLE_OUTPUT_PATH /disk2/WebServer/sylar/bin)
+# 指定生成的动态链接文件路径
 SET(LIBRARY_OUTPUT_PATH /disk2/WebServer/sylar/lib)
