@@ -136,7 +136,23 @@ void run() {
     server->start();
 }
 ```
-### Demo演示  
+### Demo演示
+
+> **注册**  
+
+![Image text](https://github.com/liwentaoCH/sylar-server/blob/main/picture_gif/%E7%99%BB%E5%BD%95.gif)
+
+> **登录**  
+
+![Image text](https://github.com/liwentaoCH/sylar-server/blob/main/picture_gif/%E6%B3%A8%E5%86%8C%E7%94%A8%E6%88%B7.gif)
+
+> **请求图片**
+  
+![Image text](https://github.com/liwentaoCH/sylar-server/blob/main/picture_gif/%E8%AF%B7%E6%B1%82%E5%9B%BE%E7%89%87%E6%96%87%E4%BB%B6.gif)
+
+> **请求视频**
+  
+![Image text](https://github.com/liwentaoCH/sylar-server/blob/main/picture_gif/%E8%AF%B7%E6%B1%82%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6.gif)
 
 
 
