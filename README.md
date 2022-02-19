@@ -164,5 +164,21 @@ make
 ```
 之后要编写服务器程序只需要新建一个文件，包含头文件**sylar.h**，并在编译时指定链接libsylar.so即可。
 
+## 压力测试
+使用jmeter压力测试工具，对xxxx:8020/sylar以及xxxx:8020/video/1两个接口进行压力测试。
+### 硬件
+处理器：AMD Ryzen7 4800H  四核  
+内存： 4GB  
+主频：2.9Hz  
+### 软件
+操作系统：CentOS 7.9(VMware虚拟机)
+### 接口一：xxxx:8020/sylar（请求初始界面）
+![Image text](https://github.com/liwentaoCH/sylar-server/blob/main/picture_gif/sylar.png)
+**吞吐量为1642/sec**  
+
+### 接口二：xxxx:8020/picture/1（请求图片）
+![Image text](https://github.com/liwentaoCH/sylar-server/blob/main/picture_gif/video.png)
+**吞吐量为1303/sec**  
+
 
 
