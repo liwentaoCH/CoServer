@@ -155,6 +155,14 @@ void run() {
 ![Image text](https://github.com/liwentaoCH/sylar-server/blob/main/picture_gif/%E8%AF%B7%E6%B1%82%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6.gif)
 
 
+## 运行  
+### 生成动态链接库libsylar.so
+依据个人文件位置，修改CMakeList.txt文件中的相应输出文件路径，之后进入build文件夹，执行：
+```shell
+cmake ..
+make
+```
+之后要编写服务器程序只需要新建一个文件，包含头文件**sylar.h**，并在编译时指定链接libsylar.so即可。
 
 
 
