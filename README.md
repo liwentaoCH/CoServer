@@ -23,10 +23,6 @@ SYLAR_LOG_FMT_INFO(g_logger, "%s", "this is a log");
 日志支持自由配置日期时间，累计运行毫秒数，线程id，线程名称，协程id，日志线别，日志名称，文件名，行号。
 
 
-### Util与Marco模块
-
-工具接口与工具类，功能宏定义。包括获取时间，日期时间格式转换，栈回溯等，以及SYLAR_ASSERT宏。详细接口参考util.h，macro.h。
-
 
 ### 配置模块
 
