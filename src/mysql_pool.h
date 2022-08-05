@@ -12,7 +12,7 @@
 #include "mutex.h"
 #include "config.h"
 
-namespace sylar{
+namespace coserver{
 
 class Mysql_pool
 {

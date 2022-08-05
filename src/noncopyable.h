@@ -1,15 +1,15 @@
 /**
  * @file noncopyable.h
  * @brief 不可拷贝对象封装
- * @author sylar.yin
+ * @author coserver.yin
  * @email 564628276@qq.com
  * @date 2019-05-31
- * @copyright Copyright (c) 2019年 sylar.yin All rights reserved (www.sylar.top)
+ * @copyright Copyright (c) 2019年 coserver.yin All rights reserved (www.coserver.top)
  */
-#ifndef __SYLAR_NONCOPYABLE_H__
-#define __SYLAR_NONCOPYABLE_H__
+#ifndef __coserver_NONCOPYABLE_H__
+#define __coserver_NONCOPYABLE_H__
 
-namespace sylar {
+namespace coserver {
 
 /**
  * @brief 对象无法拷贝,赋值

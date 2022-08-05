@@ -19,48 +19,48 @@
  */
 #define SYLAR_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
-        sylar::LogEventWrap(sylar::LogEvent::ptr(new sylar::LogEvent(logger, level, \
-                        __FILE__, __LINE__, 0, sylar::GetThreadId(),\
-                sylar::GetFiberId(), time(0), sylar::Thread::GetName()))).getSS()
+        coserver::LogEventWrap(coserver::LogEvent::ptr(new coserver::LogEvent(logger, level, \
+                        __FILE__, __LINE__, 0, coserver::GetThreadId(),\
+                coserver::GetFiberId(), time(0), coserver::Thread::GetName()))).getSS()
 
 /**
  * @brief 使用流式方式将日志级别debug的日志写入到logger
  */
-#define SYLAR_LOG_DEBUG(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::DEBUG)
+#define SYLAR_LOG_DEBUG(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::DEBUG)
 
 /**
  * @brief 使用流式方式将日志级别info的日志写入到logger
  */
-#define SYLAR_LOG_INFO(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::INFO)
+#define SYLAR_LOG_INFO(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::INFO)
 
 /**
  * @brief 使用流式方式将日志级别warn的日志写入到logger
  */
-#define SYLAR_LOG_WARN(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::WARN)
+#define SYLAR_LOG_WARN(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::WARN)
 
 /**
  * @brief 使用流式方式将日志级别error的日志写入到logger
  */
-#define SYLAR_LOG_ERROR(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::ERROR)
+#define SYLAR_LOG_ERROR(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::ERROR)
 
 /**
  * @brief 使用流式方式将日志级别fatal的日志写入到logger
  */
-#define SYLAR_LOG_FATAL(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::FATAL)
+#define SYLAR_LOG_FATAL(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::FATAL)
 
 /**
  * @brief 使用格式化方式将日志级别level的日志写入到logger
  */
 #define SYLAR_LOG_FMT_LEVEL(logger, level, fmt, ...) \
     if(logger->getLevel() <= level) \
-        sylar::LogEventWrap(sylar::LogEvent::ptr(new sylar::LogEvent(logger, level, \
-                        __FILE__, __LINE__, 0, sylar::GetThreadId(),\
-                sylar::GetFiberId(), time(0), sylar::Thread::GetName()))).getEvent()->format(fmt, __VA_ARGS__)
+        coserver::LogEventWrap(coserver::LogEvent::ptr(new coserver::LogEvent(logger, level, \
+                        __FILE__, __LINE__, 0, coserver::GetThreadId(),\
+                coserver::GetFiberId(), time(0), coserver::Thread::GetName()))).getEvent()->format(fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别debug的日志写入到logger
  */
-#define SYLAR_LOG_FMT_DEBUG(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::DEBUG, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_DEBUG(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::DEBUG, fmt, __VA_ARGS__)
 
 // LogEventWrap::~LogEventWrap() {
 //     m_event->getLogger()->log(m_event->getLevel(), m_event);  析构的时候输出
@@ -70,34 +70,34 @@
 /**
  * @brief 使用格式化方式将日志级别info的日志写入到logger
  */
-#define SYLAR_LOG_FMT_INFO(logger, fmt, ...)  SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::INFO, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_INFO(logger, fmt, ...)  SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::INFO, fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别warn的日志写入到logger
  */
-#define SYLAR_LOG_FMT_WARN(logger, fmt, ...)  SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::WARN, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_WARN(logger, fmt, ...)  SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::WARN, fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别error的日志写入到logger
  */
-#define SYLAR_LOG_FMT_ERROR(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::ERROR, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_ERROR(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::ERROR, fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别fatal的日志写入到logger
  */
-#define SYLAR_LOG_FMT_FATAL(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::FATAL, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_FATAL(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::FATAL, fmt, __VA_ARGS__)
 
 /**
  * @brief 获取主日志器
  */
-#define SYLAR_LOG_ROOT() sylar::LoggerMgr::GetInstance()->getRoot()
+#define SYLAR_LOG_ROOT() coserver::LoggerMgr::GetInstance()->getRoot()
 
 /**
  * @brief 获取name的日志器
  */
-#define SYLAR_LOG_NAME(name) sylar::LoggerMgr::GetInstance()->getLogger(name)
+#define SYLAR_LOG_NAME(name) coserver::LoggerMgr::GetInstance()->getLogger(name)
 
-namespace sylar {
+namespace coserver {
 
 class Logger;
 class LoggerManager;
@@ -612,7 +612,7 @@ private:
 };
 
 /// 日志器管理类单例模式
-typedef sylar::Singleton<LoggerManager> LoggerMgr;
+typedef coserver::Singleton<LoggerManager> LoggerMgr;
 
 }
 

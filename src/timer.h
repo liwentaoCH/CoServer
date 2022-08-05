@@ -6,7 +6,7 @@
 #include <set>
 #include "thread.h"
 
-namespace sylar {
+namespace coserver {
 
 class TimerManager;
 /**

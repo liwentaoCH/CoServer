@@ -6,7 +6,7 @@
 #include "thread.h"
 #include "singleton.h"
 
-namespace sylar {
+namespace coserver {
 
 /**
  * @brief 文件句柄上下文类

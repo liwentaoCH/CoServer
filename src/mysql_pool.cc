@@ -2,34 +2,34 @@
 #include "log.h"
 #include <vector>
     
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
-static sylar::ConfigVar<std::string>::ptr g_url =
-    sylar::Config::Lookup("db.url",std::string("192.168.138.148"), "db.url");
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::ConfigVar<std::string>::ptr g_url =
+    coserver::Config::Lookup("db.url",std::string("192.168.138.148"), "db.url");
 
-static sylar::ConfigVar<std::string>::ptr g_User =
-    sylar::Config::Lookup("db.user",std::string("root"), "db.User");
+static coserver::ConfigVar<std::string>::ptr g_User =
+    coserver::Config::Lookup("db.user",std::string("root"), "db.User");
 
-static sylar::ConfigVar<std::string>::ptr g_PassWord =
-    sylar::Config::Lookup("db.password"
+static coserver::ConfigVar<std::string>::ptr g_PassWord =
+    coserver::Config::Lookup("db.password"
             ,std::string("666888aA!")
             , "db.PassWord");
 
-static sylar::ConfigVar<std::string>::ptr g_DataBaseName =
-    sylar::Config::Lookup("db.databasename"
+static coserver::ConfigVar<std::string>::ptr g_DataBaseName =
+    coserver::Config::Lookup("db.databasename"
             ,std::string("user")
             , "db.DataBaseName");
 
-static sylar::ConfigVar<int>::ptr g_Port =
-    sylar::Config::Lookup("db.port"
+static coserver::ConfigVar<int>::ptr g_Port =
+    coserver::Config::Lookup("db.port"
             ,(int)3306
             , "db.Port");
 
-static sylar::ConfigVar<int>::ptr g_MaxConn =
-    sylar::Config::Lookup("db.maxconn"
+static coserver::ConfigVar<int>::ptr g_MaxConn =
+    coserver::Config::Lookup("db.maxconn"
             ,(int)10
             , "db.MaxConn");
 
-namespace sylar{
+namespace coserver{
 
 Mysql_pool* Mysql_pool::GetInstance() {
     static Mysql_pool DB;

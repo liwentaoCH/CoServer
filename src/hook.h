@@ -9,7 +9,7 @@
 #include <time.h>
 #include <unistd.h>
 
-namespace sylar {
+namespace coserver {
     /**
      * @brief 当前线程是否hook close
      */

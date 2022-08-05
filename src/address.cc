@@ -9,10 +9,8 @@
 
 
 
-namespace sylar {
-
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
-
+namespace coserver {
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 template<class T>   
 static T CreateMask(uint32_t bits) {
     return (1 << (sizeof(T) * 8 - bits)) - 1;

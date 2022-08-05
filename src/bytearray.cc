@@ -7,9 +7,9 @@
 #include "endan.h"
 #include "log.h"
 
-namespace sylar {
+namespace coserver {
 
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 ByteArray::Node::Node(size_t s)
     :ptr(new char[s])

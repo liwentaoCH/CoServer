@@ -8,18 +8,18 @@
 #include "socket.h"
 #include "noncopyable.h"
 
-namespace sylar {
+namespace coserver {
 
 class TcpServer : public std::enable_shared_from_this<TcpServer> 
                     , Noncopyable{
 public:
     typedef std::shared_ptr<TcpServer> ptr;
-    TcpServer(sylar::IOManager* worker = sylar::IOManager::GetThis()
-              ,sylar::IOManager* io_woker = sylar::IOManager::GetThis()
-              ,sylar::IOManager* accept_worker = sylar::IOManager::GetThis());
+    TcpServer(coserver::IOManager* worker = coserver::IOManager::GetThis()
+              ,coserver::IOManager* io_woker = coserver::IOManager::GetThis()
+              ,coserver::IOManager* accept_worker = coserver::IOManager::GetThis());
     virtual ~TcpServer();
 
-    virtual bool bind(sylar::Address::ptr addr);
+    virtual bool bind(coserver::Address::ptr addr);
     virtual bool bind(const std::vector<Address::ptr>& addr,
                         std::vector<Address::ptr>& fails);
     virtual bool start();

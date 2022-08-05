@@ -9,7 +9,7 @@
 #include <type_traits>
 #include <endian.h>
 
-namespace sylar {
+namespace coserver {
 
 /**
  * @brief 8字节类型的字节序转化

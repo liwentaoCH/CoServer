@@ -1,7 +1,7 @@
 #include "timer.h"
 #include "util.h"
 
-namespace sylar {
+namespace coserver {
 
 bool Timer::Comparator::operator()(const Timer::ptr& lhs
                         ,const Timer::ptr& rhs) const {
@@ -30,7 +30,7 @@ Timer::Timer(uint64_t ms, std::function<void()> cb,
     ,m_ms(ms)
     ,m_cb(cb)
     ,m_manager(manager) {
-    m_next = sylar::GetCurrentMS() + m_ms;
+    m_next = coserver::GetCurrentMS() + m_ms;
 }
 
 Timer::Timer(uint64_t next)
@@ -58,7 +58,7 @@ bool Timer::refresh() {
         return false;
     }
     m_manager->m_timers.erase(it);
-    m_next = sylar::GetCurrentMS() + m_ms;
+    m_next = coserver::GetCurrentMS() + m_ms;
     m_manager->m_timers.insert(shared_from_this());
     return true;
 }
@@ -78,7 +78,7 @@ bool Timer::reset(uint64_t ms, bool from_now) {
     m_manager->m_timers.erase(it);
     uint64_t start = 0;
     if(from_now) {
-        start = sylar::GetCurrentMS();
+        start = coserver::GetCurrentMS();
     } else {
         start = m_next - m_ms;
     }
@@ -90,7 +90,7 @@ bool Timer::reset(uint64_t ms, bool from_now) {
 }
 
 TimerManager::TimerManager() {
-    m_previouseTime = sylar::GetCurrentMS();
+    m_previouseTime = coserver::GetCurrentMS();
 }
 
 TimerManager::~TimerManager() {
@@ -125,7 +125,7 @@ uint64_t TimerManager::getNextTimer() {
     }
 
     const Timer::ptr& next = *m_timers.begin();
-    uint64_t now_ms = sylar::GetCurrentMS();
+    uint64_t now_ms = coserver::GetCurrentMS();
     if(now_ms >= next->m_next) {
         return 0;
     } else {
@@ -134,7 +134,7 @@ uint64_t TimerManager::getNextTimer() {
 }
 
 void TimerManager::listExpiredCb(std::vector<std::function<void()> >& cbs) {
-    uint64_t now_ms = sylar::GetCurrentMS();
+    uint64_t now_ms = coserver::GetCurrentMS();
     std::vector<Timer::ptr> expired;
     {
         RWMutexType::ReadLock lock(m_mutex);

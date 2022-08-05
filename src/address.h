@@ -12,15 +12,15 @@
 #include <vector>
 #include <map>
 
-namespace sylar {
+namespace coserver {
 
 class IPAddress;
 
 /**
  * @brief 网络地址的基类,抽象类
  */
-class Address {
-public:
+class Address 
+public
     typedef std::shared_ptr<Address> ptr;
 
     /**
@@ -34,7 +34,7 @@ public:
     /**
      * @brief 通过host地址返回对应条件的所有Address
      * @param[out] result 保存满足条件的Address
-     * @param[in] host 域名,服务器名等.举例: www.sylar.top[:80] (方括号为可选内容)
+     * @param[in] host 域名,服务器名等.举例: www.coserver.top[:80] (方括号为可选内容)
      * @param[in] family 协议族(AF_INT, AF_INT6, AF_UNIX)
      * @param[in] type socketl类型SOCK_STREAM、SOCK_DGRAM 等
      * @param[in] protocol 协议,IPPROTO_TCP、IPPROTO_UDP 等
@@ -44,7 +44,7 @@ public:
             int family = AF_INET, int type = 0, int protocol = 0);
     /**
      * @brief 通过host地址返回对应条件的任意Address
-     * @param[in] host 域名,服务器名等.举例: www.sylar.top[:80] (方括号为可选内容)
+     * @param[in] host 域名,服务器名等.举例: www.coserver.top[:80] (方括号为可选内容)
      * @param[in] family 协议族(AF_INT, AF_INT6, AF_UNIX)
      * @param[in] type socketl类型SOCK_STREAM、SOCK_DGRAM 等
      * @param[in] protocol 协议,IPPROTO_TCP、IPPROTO_UDP 等
@@ -54,7 +54,7 @@ public:
             int family = AF_INET, int type = 0, int protocol = 0);
     /**
      * @brief 通过host地址返回对应条件的任意IPAddress
-     * @param[in] host 域名,服务器名等.举例: www.sylar.top[:80] (方括号为可选内容)
+     * @param[in] host 域名,服务器名等.举例: www.coserver.top[:80] (方括号为可选内容)
      * @param[in] family 协议族(AF_INT, AF_INT6, AF_UNIX)
      * @param[in] type socketl类型SOCK_STREAM、SOCK_DGRAM 等
      * @param[in] protocol 协议,IPPROTO_TCP、IPPROTO_UDP 等
@@ -142,7 +142,7 @@ public:
 
     /**
      * @brief 通过域名,IP,服务器名创建IPAddress
-     * @param[in] address 域名,IP,服务器名等.举例: www.sylar.top
+     * @param[in] address 域名,IP,服务器名等.举例: www.coserver.top
      * @param[in] port 端口号
      * @return 调用成功返回IPAddress,失败返回nullptr
      */

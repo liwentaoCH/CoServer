@@ -1,22 +1,22 @@
 #include "tcp_server.h"
 #include "config.h"
 
-namespace sylar {
+namespace coserver {
 
-static sylar::ConfigVar<uint64_t>::ptr g_tcp_server_read_timeout = 
-    sylar::Config::Lookup("tcp_server.read_timeout", (uint64_t)(60 * 1000 * 2),
+static coserver::ConfigVar<uint64_t>::ptr g_tcp_server_read_timeout = 
+    coserver::Config::Lookup("tcp_server.read_timeout", (uint64_t)(60 * 1000 * 2),
             "tcp server read timeout");
 
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
-TcpServer::TcpServer(sylar::IOManager* worker,
-                    sylar::IOManager* io_worker,
-                    sylar::IOManager* accept_worker)
+TcpServer::TcpServer(coserver::IOManager* worker,
+                    coserver::IOManager* io_worker,
+                    coserver::IOManager* accept_worker)
     :m_worker(worker)
     ,m_acceptWorker(accept_worker)
     ,m_ioWorker(io_worker)
     ,m_recvTimeout(g_tcp_server_read_timeout->getValue())
-    ,m_name("sylar/1.0.0")
+    ,m_name("coserver/1.0.0")
     ,m_isStop(true) {
 }
 
@@ -27,7 +27,7 @@ TcpServer::~TcpServer() {
     m_socks.clear();
 }
 
-bool TcpServer::bind(sylar::Address::ptr addr) {
+bool TcpServer::bind(coserver::Address::ptr addr) {
     std::vector<Address::ptr> addrs;
     std::vector<Address::ptr> fails;
     addrs.push_back(addr);

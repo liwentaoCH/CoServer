@@ -2,7 +2,7 @@
 #include "macro.h"
 
 
-namespace sylar {
+namespace coserver {
 
 Semaphore::Semaphore(uint32_t count) {
     if(sem_init(&m_semaphore, 0, count)) {

@@ -5,7 +5,7 @@
 #include "scheduler.h"
 #include <atomic>
 
-namespace sylar {
+namespace coserver {
 
 static Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
@@ -91,8 +91,6 @@ Fiber::~Fiber() {
             SetThis(nullptr);
         }
     }
-    //SYLAR_LOG_DEBUG(g_logger) << "Fiber::~Fiber id=" << m_id
-                              //<< " total=" << s_fiber_count;
 }
 
 //重置协程函数，并重置状态
@@ -197,13 +195,13 @@ void Fiber::MainFunc() {
         SYLAR_LOG_ERROR(g_logger) << "Fiber Except: " << ex.what()
             << " fiber_id=" << cur->getId()
             << std::endl
-            << sylar::BacktraceToString();
+            << coserver::BacktraceToString();
     } catch (...) {
         cur->m_state = EXCEPT;
         SYLAR_LOG_ERROR(g_logger) << "Fiber Except"
             << " fiber_id=" << cur->getId()
             << std::endl
-            << sylar::BacktraceToString();
+            << coserver::BacktraceToString();
     }
 
     auto raw_ptr = cur.get();
@@ -225,13 +223,13 @@ void Fiber::CallerMainFunc() {
         SYLAR_LOG_ERROR(g_logger) << "Fiber Except: " << ex.what()
             << " fiber_id=" << cur->getId()
             << std::endl
-            << sylar::BacktraceToString();
+            << coserver::BacktraceToString();
     } catch (...) {
         cur->m_state = EXCEPT;
         SYLAR_LOG_ERROR(g_logger) << "Fiber Except"
             << " fiber_id=" << cur->getId()
             << std::endl
-            << sylar::BacktraceToString();
+            << coserver::BacktraceToString();
     }
 
     auto raw_ptr = cur.get();

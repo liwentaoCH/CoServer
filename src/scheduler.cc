@@ -3,9 +3,9 @@
 #include "macro.h"
 #include "hook.h"
 
-namespace sylar {
+namespace coserver {
 
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 static thread_local Scheduler* t_scheduler = nullptr;
 static thread_local Fiber* t_scheduler_fiber = nullptr;
@@ -15,17 +15,17 @@ Scheduler::Scheduler(size_t threads, bool use_caller, const std::string& name)
     SYLAR_ASSERT(threads > 0);
 
     if(use_caller) {
-        sylar::Fiber::GetThis();
+        coserver::Fiber::GetThis();
         --threads;
 
         SYLAR_ASSERT(GetThis() == nullptr);
         t_scheduler = this;
 
         m_rootFiber.reset(new Fiber(std::bind(&Scheduler::run, this), 0, true));
-        sylar::Thread::SetName(m_name);
+        coserver::Thread::SetName(m_name);
 
         t_scheduler_fiber = m_rootFiber.get();
-        m_rootThread = sylar::GetThreadId();
+        m_rootThread = coserver::GetThreadId();
         m_threadIds.push_back(m_rootThread);
     } else {
         m_rootThread = -1;
@@ -137,7 +137,7 @@ void Scheduler::run() {
     SYLAR_LOG_DEBUG(g_logger) << m_name << " run";
     set_hook_enable(true);
     setThis();
-    if(sylar::GetThreadId() != m_rootThread) {
+    if(coserver::GetThreadId() != m_rootThread) {
         t_scheduler_fiber = Fiber::GetThis().get();
     }
 
@@ -153,7 +153,7 @@ void Scheduler::run() {
             MutexType::Lock lock(m_mutex);
             auto it = m_fibers.begin();
             while(it != m_fibers.end()) {
-                if(it->thread != -1 && it->thread != sylar::GetThreadId()) {
+                if(it->thread != -1 && it->thread != coserver::GetThreadId()) {
                     ++it;
                     tickle_me = true;
                     continue;
@@ -243,14 +243,14 @@ bool Scheduler::stopping() {
 void Scheduler::idle() {
     SYLAR_LOG_INFO(g_logger) << "idle";
     while(!stopping()) {
-        sylar::Fiber::YieldToHold();
+        coserver::Fiber::YieldToHold();
     }
 }
 
 void Scheduler::switchTo(int thread) {
     SYLAR_ASSERT(Scheduler::GetThis() != nullptr);
     if(Scheduler::GetThis() == this) {
-        if(thread == -1 || thread == sylar::GetThreadId()) {
+        if(thread == -1 || thread == coserver::GetThreadId()) {
             return;
         }
     }

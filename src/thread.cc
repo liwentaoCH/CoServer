@@ -2,12 +2,12 @@
 #include "log.h"
 #include "util.h"
 
-namespace sylar {
+namespace coserver {
 
 static thread_local Thread* t_thread = nullptr;
 static thread_local std::string t_thread_name = "UNKNOW";
 
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 Thread* Thread::GetThis() {
     return t_thread;
@@ -64,7 +64,7 @@ void* Thread::run(void* arg) {
     Thread* thread = (Thread*)arg;
     t_thread = thread;
     t_thread_name = thread->m_name;
-    thread->m_id = sylar::GetThreadId();
+    thread->m_id = coserver::GetThreadId();
     pthread_setname_np(pthread_self(), thread->m_name.substr(0, 15).c_str());
 
     std::function<void()> cb;

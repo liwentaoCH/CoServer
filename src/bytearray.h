@@ -8,7 +8,7 @@
 #include <sys/socket.h>
 #include <vector>
 
-namespace sylar {
+namespace coserver {
 
 /**
  * @brief 二进制数组,提供基础类型的序列化,反序列化功能

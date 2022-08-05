@@ -6,16 +6,16 @@
 #include "hook.h"
 #include <limits.h>
 
-namespace sylar {
+namespace coserver {
 
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
-Socket::ptr Socket::CreateTCP(sylar::Address::ptr address) {
+Socket::ptr Socket::CreateTCP(coserver::Address::ptr address) {
     Socket::ptr sock(new Socket(address->getFamily(), TCP, 0));
     return sock;
 }
 
-Socket::ptr Socket::CreateUDP(sylar::Address::ptr address) {
+Socket::ptr Socket::CreateUDP(coserver::Address::ptr address) {
     Socket::ptr sock(new Socket(address->getFamily(), UDP, 0));
     sock->newSock();
     sock->m_isConnected = true;
@@ -166,7 +166,7 @@ bool Socket::bind(const Address::ptr addr) {
     //     if(sock->connect(uaddr)) {
     //         return false;
     //     } else {
-    //         sylar::FSUtil::Unlink(uaddr->getPath(), true);
+    //         coserver::FSUtil::Unlink(uaddr->getPath(), true);
     //     }
     // }
 
@@ -417,14 +417,14 @@ std::ostream& Socket::dump(std::ostream& os) const {
 }
 
 bool Socket::cancelRead() {
-    return IOManager::GetThis()->cancelEvent(m_sock, sylar::IOManager::READ);
+    return IOManager::GetThis()->cancelEvent(m_sock, coserver::IOManager::READ);
 }
 
 bool Socket::cancelWrite() {
-    return IOManager::GetThis()->cancelEvent(m_sock, sylar::IOManager::WRITE);
+    return IOManager::GetThis()->cancelEvent(m_sock, coserver::IOManager::WRITE);
 }
 bool Socket::cancelAccept() {
-    return IOManager::GetThis()->cancelEvent(m_sock, sylar::IOManager::READ);
+    return IOManager::GetThis()->cancelEvent(m_sock, coserver::IOManager::READ);
 }
 
 bool Socket::cancelAll() {

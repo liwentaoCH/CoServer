@@ -1,7 +1,7 @@
 #include "socket_stream.h"
 #include "src/util.h"
 
-namespace sylar {
+namespace coserver {
 
 SocketStream::SocketStream(Socket::ptr sock, bool owner)
     :m_socket(sock)

@@ -5,9 +5,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-namespace sylar {
+namespace coserver {
 
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 ConfigVarBase::ptr Config::LookupBase(const std::string& name) {
     RWMutexType::ReadLock lock(GetMutex());
@@ -64,10 +64,10 @@ void Config::LoadFromYaml(const YAML::Node& root) {
 }
 
 static std::map<std::string, uint64_t> s_file2modifytime;
-static sylar::Mutex s_mutex;
+static coserver::Mutex s_mutex;
 
 void Config::LoadFromConfDir(const std::string& path, bool force) {
-    std::string absoulte_path = sylar::EnvMgr::GetInstance()->getAbsolutePath(path);
+    std::string absoulte_path = coserver::EnvMgr::GetInstance()->getAbsolutePath(path);
     std::vector<std::string> files;
     FSUtil::ListAllFile(files, absoulte_path, ".yml");
 
@@ -75,7 +75,7 @@ void Config::LoadFromConfDir(const std::string& path, bool force) {
         {
             struct stat st;
             lstat(i.c_str(), &st);
-            sylar::Mutex::Lock lock(s_mutex);
+            coserver::Mutex::Lock lock(s_mutex);
             if(!force && s_file2modifytime[i] == (uint64_t)st.st_mtime) {
                 continue;
             }

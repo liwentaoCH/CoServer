@@ -3,7 +3,7 @@
 
 #include "mutex.h"
 
-namespace sylar {
+namespace coserver {
 
 /**
  * @brief 线程类

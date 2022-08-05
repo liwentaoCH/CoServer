@@ -6,7 +6,7 @@
 #include <functional>
 #include "thread.h"
 
- namespace sylar {
+ namespace coserver {
  // 协程解决的是异步事件，关注并发而不是并行
  class Scheduler;
  class Fiber : public std::enable_shared_from_this<Fiber>{
@@ -15,10 +15,14 @@ public:
     typedef std::shared_ptr<Fiber> ptr;
 
     enum State {
+        // 初始状态
         INIT,
         HOLD,
+        // 运行状态
         EXEC,
+        // 终止状态
         TERM,
+        // 就绪状态
         READY,
         EXCEPT
     };
@@ -29,12 +33,12 @@ public:
      Fiber(std::function<void()> cb, size_t stacksize = 0, bool use_caller = false);
      ~Fiber();
 
-    //重置协程函数，并重置状态
-    //INIT，TERM
+    // 重置协程函数，并重置状态
+    // INIT，TERM
     void reset(std::function<void()> cb); // 节约内存分配
-    //切换到当前协程执行
+    // 切换到当前协程执行
     void swapIn();
-    //切换到后台执行
+    // 切换到后台执行
     void swapOut();
 
     void call();

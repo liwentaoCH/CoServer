@@ -4,7 +4,7 @@
 #include "scheduler.h"
 #include "timer.h"
 
-namespace sylar {
+namespace coserver {
 
 /**
  * @brief 基于Epoll的IO协程调度器

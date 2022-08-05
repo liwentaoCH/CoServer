@@ -10,7 +10,7 @@
 #include "address.h"
 #include "noncopyable.h"
 
-namespace sylar {
+namespace coserver {
 
 class Socket : public std::enable_shared_from_this<Socket>, Noncopyable {
 public:
@@ -33,8 +33,8 @@ public:
         UNIX = AF_UNIX,
     };
 
-    static Socket::ptr CreateTCP(sylar::Address::ptr address);
-    static Socket::ptr CreateUDP(sylar::Address::ptr address);
+    static Socket::ptr CreateTCP(coserver::Address::ptr address);
+    static Socket::ptr CreateUDP(coserver::Address::ptr address);
 
     static Socket::ptr CreateTCPSocket();
     static Socket::ptr CreateUDPSocket();

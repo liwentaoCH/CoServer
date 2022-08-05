@@ -8,11 +8,11 @@
 #include "fd_manager.h"
 #include "macro.h"
 
-sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
-namespace sylar {
+coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+namespace coserver {
 
-static sylar::ConfigVar<int>::ptr g_tcp_connect_timeout =
-    sylar::Config::Lookup("tcp.connect.timeout", 5000, "tcp connect timeout");
+static coserver::ConfigVar<int>::ptr g_tcp_connect_timeout =
+    coserver::Config::Lookup("tcp.connect.timeout", 5000, "tcp connect timeout");
 
 static thread_local bool t_hook_enable = false;
 
@@ -82,11 +82,11 @@ struct timer_info {
 template<typename OriginFun, typename... Args>
 static ssize_t do_io(int fd, OriginFun fun, const char* hook_fun_name,
         uint32_t event, int timeout_so, Args&&... args) {
-    if(!sylar::t_hook_enable) {
+    if(!coserver::t_hook_enable) {
         return fun(fd, std::forward<Args>(args)...);
     }
 
-    sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(fd);
+    coserver::FdCtx::ptr ctx = coserver::FdMgr::GetInstance()->get(fd);
     if(!ctx) {
         return fun(fd, std::forward<Args>(args)...);
     }
@@ -109,8 +109,8 @@ retry:
         n = fun(fd, std::forward<Args>(args)...);
     }
     if(n == -1 && errno == EAGAIN) {
-        sylar::IOManager* iom = sylar::IOManager::GetThis();
-        sylar::Timer::ptr timer;
+        coserver::IOManager* iom = coserver::IOManager::GetThis();
+        coserver::Timer::ptr timer;
         std::weak_ptr<timer_info> winfo(tinfo);
 
         if(to != (uint64_t)-1) {
@@ -120,11 +120,11 @@ retry:
                     return;
                 }
                 t->cancelled = ETIMEDOUT;
-                iom->cancelEvent(fd, (sylar::IOManager::Event)(event));   // 拿出来执行最后一次
+                iom->cancelEvent(fd, (coserver::IOManager::Event)(event));   // 拿出来执行最后一次
             }, winfo);
         }
 
-        int rt = iom->addEvent(fd, (sylar::IOManager::Event)(event));
+        int rt = iom->addEvent(fd, (coserver::IOManager::Event)(event));
         if(SYLAR_UNLIKELY(rt)) {
             SYLAR_LOG_ERROR(g_logger) << hook_fun_name << " addEvent("
                 << fd << ", " << event << ")";
@@ -133,7 +133,7 @@ retry:
             }
             return -1;
         } else {
-            sylar::Fiber::YieldToHold();
+            coserver::Fiber::YieldToHold();
             if(timer) {
                 timer->cancel();
             }
@@ -155,64 +155,64 @@ extern "C" {
 #undef XX
 
 unsigned int sleep(unsigned int seconds) {
-    if(!sylar::t_hook_enable) {
+    if(!coserver::t_hook_enable) {
         return sleep_f(seconds);
     }
 
-    sylar::Fiber::ptr fiber = sylar::Fiber::GetThis();
-    sylar::IOManager* iom = sylar::IOManager::GetThis();
-    iom->addTimer(seconds * 1000, std::bind((void(sylar::Scheduler::*)
-            (sylar::Fiber::ptr, int thread))&sylar::IOManager::schedule
+    coserver::Fiber::ptr fiber = coserver::Fiber::GetThis();
+    coserver::IOManager* iom = coserver::IOManager::GetThis();
+    iom->addTimer(seconds * 1000, std::bind((void(coserver::Scheduler::*)
+            (coserver::Fiber::ptr, int thread))&coserver::IOManager::schedule
             ,iom, fiber, -1));
-    sylar::Fiber::YieldToHold();
+    coserver::Fiber::YieldToHold();
     return 0;
 }
 
 int usleep(useconds_t usec) {
-    if(!sylar::t_hook_enable) {
+    if(!coserver::t_hook_enable) {
         return usleep_f(usec);
     }
-    sylar::Fiber::ptr fiber = sylar::Fiber::GetThis();
-    sylar::IOManager* iom = sylar::IOManager::GetThis();
-    iom->addTimer(usec / 1000, std::bind((void(sylar::Scheduler::*)
-            (sylar::Fiber::ptr, int thread))&sylar::IOManager::schedule
+    coserver::Fiber::ptr fiber = coserver::Fiber::GetThis();
+    coserver::IOManager* iom = coserver::IOManager::GetThis();
+    iom->addTimer(usec / 1000, std::bind((void(coserver::Scheduler::*)
+            (coserver::Fiber::ptr, int thread))&coserver::IOManager::schedule
             ,iom, fiber, -1));
-    sylar::Fiber::YieldToHold();
+    coserver::Fiber::YieldToHold();
     return 0;
 }
 
 int nanosleep(const struct timespec *req, struct timespec *rem) {
-    if(!sylar::t_hook_enable) {
+    if(!coserver::t_hook_enable) {
         return nanosleep_f(req, rem);
     }
 
     int timeout_ms = req->tv_sec * 1000 + req->tv_nsec / 1000 /1000;
-    sylar::Fiber::ptr fiber = sylar::Fiber::GetThis();
-    sylar::IOManager* iom = sylar::IOManager::GetThis();
-    iom->addTimer(timeout_ms, std::bind((void(sylar::Scheduler::*)
-            (sylar::Fiber::ptr, int thread))&sylar::IOManager::schedule
+    coserver::Fiber::ptr fiber = coserver::Fiber::GetThis();
+    coserver::IOManager* iom = coserver::IOManager::GetThis();
+    iom->addTimer(timeout_ms, std::bind((void(coserver::Scheduler::*)
+            (coserver::Fiber::ptr, int thread))&coserver::IOManager::schedule
             ,iom, fiber, -1));
-    sylar::Fiber::YieldToHold();
+    coserver::Fiber::YieldToHold();
     return 0;
 }
 
 int socket(int domain, int type, int protocol) {
-    if(!sylar::t_hook_enable) {
+    if(!coserver::t_hook_enable) {
         return socket_f(domain, type, protocol);
     }
     int fd = socket_f(domain, type, protocol);
     if(fd == -1) {
         return fd;
     }
-    sylar::FdMgr::GetInstance()->get(fd, true);
+    coserver::FdMgr::GetInstance()->get(fd, true);
     return fd;
 }
 
 int connect_with_timeout(int fd, const struct sockaddr* addr, socklen_t addrlen, uint64_t timeout_ms) {
-    if(!sylar::t_hook_enable) {
+    if(!coserver::t_hook_enable) {
         return connect_f(fd, addr, addrlen);
     }
-    sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(fd);
+    coserver::FdCtx::ptr ctx = coserver::FdMgr::GetInstance()->get(fd);
     if(!ctx || ctx->isClose()) {
         errno = EBADF;
         return -1;
@@ -233,8 +233,8 @@ int connect_with_timeout(int fd, const struct sockaddr* addr, socklen_t addrlen,
         return n;
     }
 
-    sylar::IOManager* iom = sylar::IOManager::GetThis();
-    sylar::Timer::ptr timer;
+    coserver::IOManager* iom = coserver::IOManager::GetThis();
+    coserver::Timer::ptr timer;
     std::shared_ptr<timer_info> tinfo(new timer_info);
     std::weak_ptr<timer_info> winfo(tinfo);
 
@@ -245,13 +245,13 @@ int connect_with_timeout(int fd, const struct sockaddr* addr, socklen_t addrlen,
                     return;
                 }
                 t->cancelled = ETIMEDOUT;
-                iom->cancelEvent(fd, sylar::IOManager::WRITE);
+                iom->cancelEvent(fd, coserver::IOManager::WRITE);
         }, winfo);
     }
 
-    int rt = iom->addEvent(fd, sylar::IOManager::WRITE);
+    int rt = iom->addEvent(fd, coserver::IOManager::WRITE);
     if(rt == 0) {
-        sylar::Fiber::YieldToHold();
+        coserver::Fiber::YieldToHold();
         if(timer) {
             timer->cancel();
         }
@@ -280,69 +280,69 @@ int connect_with_timeout(int fd, const struct sockaddr* addr, socklen_t addrlen,
 }
 
 int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen) {
-    return connect_with_timeout(sockfd, addr, addrlen, sylar::s_connect_timeout);
+    return connect_with_timeout(sockfd, addr, addrlen, coserver::s_connect_timeout);
 }
 
 int accept(int s, struct sockaddr *addr, socklen_t *addrlen) {
-    int fd = do_io(s, accept_f, "accept", sylar::IOManager::READ, SO_RCVTIMEO, addr, addrlen);
+    int fd = do_io(s, accept_f, "accept", coserver::IOManager::READ, SO_RCVTIMEO, addr, addrlen);
     if(fd >= 0) {
-        sylar::FdMgr::GetInstance()->get(fd, true);
+        coserver::FdMgr::GetInstance()->get(fd, true);
     }
     return fd;
 }
 
 ssize_t read(int fd, void *buf, size_t count) {
-    return do_io(fd, read_f, "read", sylar::IOManager::READ, SO_RCVTIMEO, buf, count);
+    return do_io(fd, read_f, "read", coserver::IOManager::READ, SO_RCVTIMEO, buf, count);
 }
 
 ssize_t readv(int fd, const struct iovec *iov, int iovcnt) {
-    return do_io(fd, readv_f, "readv", sylar::IOManager::READ, SO_RCVTIMEO, iov, iovcnt);
+    return do_io(fd, readv_f, "readv", coserver::IOManager::READ, SO_RCVTIMEO, iov, iovcnt);
 }
 
 ssize_t recv(int sockfd, void *buf, size_t len, int flags) {
-    return do_io(sockfd, recv_f, "recv", sylar::IOManager::READ, SO_RCVTIMEO, buf, len, flags);
+    return do_io(sockfd, recv_f, "recv", coserver::IOManager::READ, SO_RCVTIMEO, buf, len, flags);
 }
 
 ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *src_addr, socklen_t *addrlen) {
-    return do_io(sockfd, recvfrom_f, "recvfrom", sylar::IOManager::READ, SO_RCVTIMEO, buf, len, flags, src_addr, addrlen);
+    return do_io(sockfd, recvfrom_f, "recvfrom", coserver::IOManager::READ, SO_RCVTIMEO, buf, len, flags, src_addr, addrlen);
 }
 
 ssize_t recvmsg(int sockfd, struct msghdr *msg, int flags) {
-    return do_io(sockfd, recvmsg_f, "recvmsg", sylar::IOManager::READ, SO_RCVTIMEO, msg, flags);
+    return do_io(sockfd, recvmsg_f, "recvmsg", coserver::IOManager::READ, SO_RCVTIMEO, msg, flags);
 }
 
 ssize_t write(int fd, const void *buf, size_t count) {
-    return do_io(fd, write_f, "write", sylar::IOManager::WRITE, SO_SNDTIMEO, buf, count);
+    return do_io(fd, write_f, "write", coserver::IOManager::WRITE, SO_SNDTIMEO, buf, count);
 }
 
 ssize_t writev(int fd, const struct iovec *iov, int iovcnt) {
-    return do_io(fd, writev_f, "writev", sylar::IOManager::WRITE, SO_SNDTIMEO, iov, iovcnt);
+    return do_io(fd, writev_f, "writev", coserver::IOManager::WRITE, SO_SNDTIMEO, iov, iovcnt);
 }
 
 ssize_t send(int s, const void *msg, size_t len, int flags) {
-    return do_io(s, send_f, "send", sylar::IOManager::WRITE, SO_SNDTIMEO, msg, len, flags);
+    return do_io(s, send_f, "send", coserver::IOManager::WRITE, SO_SNDTIMEO, msg, len, flags);
 }
 
 ssize_t sendto(int s, const void *msg, size_t len, int flags, const struct sockaddr *to, socklen_t tolen) {
-    return do_io(s, sendto_f, "sendto", sylar::IOManager::WRITE, SO_SNDTIMEO, msg, len, flags, to, tolen);
+    return do_io(s, sendto_f, "sendto", coserver::IOManager::WRITE, SO_SNDTIMEO, msg, len, flags, to, tolen);
 }
 
 ssize_t sendmsg(int s, const struct msghdr *msg, int flags) {
-    return do_io(s, sendmsg_f, "sendmsg", sylar::IOManager::WRITE, SO_SNDTIMEO, msg, flags);
+    return do_io(s, sendmsg_f, "sendmsg", coserver::IOManager::WRITE, SO_SNDTIMEO, msg, flags);
 }
 
 int close(int fd) {
-    if(!sylar::t_hook_enable) {
+    if(!coserver::t_hook_enable) {
         return close_f(fd);
     }
 
-    sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(fd);
+    coserver::FdCtx::ptr ctx = coserver::FdMgr::GetInstance()->get(fd);
     if(ctx) {
-        auto iom = sylar::IOManager::GetThis();
+        auto iom = coserver::IOManager::GetThis();
         if(iom) {
             iom->cancelAll(fd);
         }
-        sylar::FdMgr::GetInstance()->del(fd);
+        coserver::FdMgr::GetInstance()->del(fd);
     }
     return close_f(fd);
 }
@@ -355,7 +355,7 @@ int fcntl(int fd, int cmd, ... /* arg */ ) {
             {
                 int arg = va_arg(va, int);
                 va_end(va);
-                sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(fd);
+                coserver::FdCtx::ptr ctx = coserver::FdMgr::GetInstance()->get(fd);
                 if(!ctx || ctx->isClose() || !ctx->isSocket()) {
                     return fcntl_f(fd, cmd, arg);
                 }
@@ -372,7 +372,7 @@ int fcntl(int fd, int cmd, ... /* arg */ ) {
             {
                 va_end(va);
                 int arg = fcntl_f(fd, cmd);
-                sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(fd);
+                coserver::FdCtx::ptr ctx = coserver::FdMgr::GetInstance()->get(fd);
                 if(!ctx || ctx->isClose() || !ctx->isSocket()) {
                     return arg;
                 }
@@ -442,7 +442,7 @@ int ioctl(int d, unsigned long int request, ...) {
 
     if(FIONBIO == request) {
         bool user_nonblock = !!*(int*)arg;
-        sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(d);
+        coserver::FdCtx::ptr ctx = coserver::FdMgr::GetInstance()->get(d);
         if(!ctx || ctx->isClose() || !ctx->isSocket()) {
             return ioctl_f(d, request, arg);
         }
@@ -456,12 +456,12 @@ int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optl
 }
 
 int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen) {
-    if(!sylar::t_hook_enable) {
+    if(!coserver::t_hook_enable) {
         return setsockopt_f(sockfd, level, optname, optval, optlen);
     }
     if(level == SOL_SOCKET) {
         if(optname == SO_RCVTIMEO || optname == SO_SNDTIMEO) {
-            sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(sockfd);
+            coserver::FdCtx::ptr ctx = coserver::FdMgr::GetInstance()->get(sockfd);
             if(ctx) {
                 const timeval* v = (const timeval*)optval;
                 ctx->setTimeout(optname, v->tv_sec * 1000 + v->tv_usec / 1000);

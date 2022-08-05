@@ -18,7 +18,7 @@
 #include "log.h"
 #include "util.h"
 
-namespace sylar {
+namespace coserver {
 
 /**
  * @brief 配置变量的基类

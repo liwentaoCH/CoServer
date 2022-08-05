@@ -8,9 +8,9 @@
 #include <string.h>
 #include <unistd.h>
 
-namespace sylar {
+namespace coserver {
 
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 enum EpollCtlOp {
 };

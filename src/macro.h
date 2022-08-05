@@ -21,7 +21,7 @@
     if(SYLAR_UNLIKELY(!(x))) { \
         SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ASSERTION: " #x \
             << "\nbacktrace:\n" \
-            << sylar::BacktraceToString(100, 2, "    "); \
+            << coserver::BacktraceToString(100, 2, "    "); \
         assert(x); \
     }
 
@@ -31,7 +31,7 @@
         SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ASSERTION: " #x \
             << "\n" << w \
             << "\nbacktrace:\n" \
-            << sylar::BacktraceToString(100, 2, "    "); \
+            << coserver::BacktraceToString(100, 2, "    "); \
         assert(x); \
     }
 

@@ -13,7 +13,7 @@
 #include "noncopyable.h"
 
 
-namespace sylar {
+namespace coserver {
 
 /**
  * @brief 信号量

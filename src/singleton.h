@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace sylar {
+namespace coserver {
 
 namespace {
 

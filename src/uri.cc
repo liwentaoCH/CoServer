@@ -2,7 +2,7 @@
 #include "uri.h"
 #include <sstream>
 
-namespace sylar {
+namespace coserver {
 
 #line 9 "uri.cc"
 static const int uri_parser_start = 451;

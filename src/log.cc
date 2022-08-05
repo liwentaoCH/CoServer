@@ -9,7 +9,7 @@
 #include "macro.h"
 #include "env.h"
 
-namespace sylar {
+namespace coserver {
 
 const char* LogLevel::ToString(LogLevel::Level level) {
     switch(level) {
@@ -260,7 +260,7 @@ void Logger::setFormatter(LogFormatter::ptr val) {      // 设置m_formatter , �
 
 void Logger::setFormatter(const std::string& val) {
     std::cout << "---" << val << std::endl;
-    sylar::LogFormatter::ptr new_val(new sylar::LogFormatter(val));
+    coserver::LogFormatter::ptr new_val(new coserver::LogFormatter(val));
     if(new_val->isError()) {
         std::cout << "Logger setFormatter name=" << m_name
                   << " value=" << val << " invalid formatter"
@@ -713,8 +713,8 @@ public:
     }
 };
 
-sylar::ConfigVar<std::set<LogDefine> >::ptr g_log_defines =
-    sylar::Config::Lookup("logs", std::set<LogDefine>(), "logs config");
+coserver::ConfigVar<std::set<LogDefine> >::ptr g_log_defines =
+    coserver::Config::Lookup("logs", std::set<LogDefine>(), "logs config");
 
 struct LogIniter {
     LogIniter() {
@@ -723,7 +723,7 @@ struct LogIniter {
             SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "on_logger_conf_changed";
             for(auto& i : new_value) {
                 auto it = old_value.find(i);
-                sylar::Logger::ptr logger;
+                coserver::Logger::ptr logger;
                 if(it == old_value.end()) {
                     //新增logger
                     logger = SYLAR_LOG_NAME(i.name);
@@ -744,11 +744,11 @@ struct LogIniter {
 
                 logger->clearAppenders();
                 for(auto& a : i.appenders) {
-                    sylar::LogAppender::ptr ap;
+                    coserver::LogAppender::ptr ap;
                     if(a.type == 1) {
                         ap.reset(new FileLogAppender(a.file));
                     } else if(a.type == 2) {
-                        if(!sylar::EnvMgr::GetInstance()->has("d")) {
+                        if(!coserver::EnvMgr::GetInstance()->has("d")) {
                             ap.reset(new StdoutLogAppender);
                         } else {
                             continue;

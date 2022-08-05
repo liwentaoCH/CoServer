@@ -4,7 +4,7 @@
 #include <memory>
 #include "bytearray.h"
 
-namespace sylar {
+namespace coserver {
 
 class Stream {
 public:
