@@ -2,7 +2,7 @@
 #include "log.h"
 
 namespace coserver{
-static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = COSERVER_LOG_NAME("system");
 
 int Stream::readFixSize(void* buffer, size_t length){
     ssize_t offset = 0;

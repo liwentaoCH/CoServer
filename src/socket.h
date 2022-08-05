@@ -1,5 +1,5 @@
-#ifndef __SYLAR_SOCKET_H__
-#define __SYLAR_SOCKET_H__
+#ifndef __COSERVER_SOCKET_H__
+#define __COSERVER_SOCKET_H__
 
 #include <memory>
 #include <netinet/tcp.h>

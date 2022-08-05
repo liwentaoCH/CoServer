@@ -1,5 +1,5 @@
-#ifndef __SYLAR_URI_H__
-#define __SYLAR_URI_H__
+#ifndef __COSERVER_URI_H__
+#define __COSERVER_URI_H__
 
 #include <memory>
 #include <string>
@@ -7,13 +7,6 @@
 #include "address.h"
 
 namespace coserver {
-
-/*
-     foo://user@coserver.com:8042/over/there?name=ferret#nose
-       \_/   \______________/\_________/ \_________/ \__/
-        |           |            |            |        |
-     scheme     authority       path        query   fragment
-*/
 
 /**
  * @brief URI类

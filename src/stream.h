@@ -1,5 +1,5 @@
-#ifndef __SYLAR_STREAM_H__
-#define __SYLAR_STREAM_H__
+#ifndef __COSERVER_STREAM_H__
+#define __COSERVER_STREAM_H__
 
 #include <memory>
 #include "bytearray.h"

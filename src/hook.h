@@ -1,5 +1,5 @@
-#ifndef __SYLAR_HOOK_H__
-#define __SYLAR_HOOK_H__
+#ifndef __COSERVER_HOOK_H__
+#define __COSERVER_HOOK_H__
 
 #include <fcntl.h>
 #include <sys/ioctl.h>

@@ -720,17 +720,17 @@ struct LogIniter {
     LogIniter() {
         g_log_defines->addListener([](const std::set<LogDefine>& old_value,
                     const std::set<LogDefine>& new_value){
-            SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "on_logger_conf_changed";
+            COSERVER_LOG_INFO(COSERVER_LOG_ROOT()) << "on_logger_conf_changed";
             for(auto& i : new_value) {
                 auto it = old_value.find(i);
                 coserver::Logger::ptr logger;
                 if(it == old_value.end()) {
                     //新增logger
-                    logger = SYLAR_LOG_NAME(i.name);
+                    logger = COSERVER_LOG_NAME(i.name);
                 } else {
                     if(!(i == *it)) {
                         //修改的logger
-                        logger = SYLAR_LOG_NAME(i.name);
+                        logger = COSERVER_LOG_NAME(i.name);
                     } else {
                         continue;
                     }
@@ -772,7 +772,7 @@ struct LogIniter {
                 auto it = new_value.find(i);
                 if(it == new_value.end()) {
                     //删除logger
-                    auto logger = SYLAR_LOG_NAME(i.name);
+                    auto logger = COSERVER_LOG_NAME(i.name);
                     logger->setLevel((LogLevel::Level)0);
                     logger->clearAppenders();
                 }

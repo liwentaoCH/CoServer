@@ -1,5 +1,5 @@
-#ifndef __SYLAR_SINGLETON_H__
-#define __SYLAR_SINGLETON_H__
+#ifndef __COSERVER_SINGLETON_H__
+#define __COSERVER_SINGLETON_H__
 
 #include <memory>
 

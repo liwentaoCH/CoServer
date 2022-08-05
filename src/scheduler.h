@@ -6,8 +6,8 @@
  * @date 2019-05-28
  * @copyright Copyright (c) 2019年 coserver.yin All rights reserved (www.coserver.top)
  */
-#ifndef __SYLAR_SCHEDULER_H__
-#define __SYLAR_SCHEDULER_H__
+#ifndef __COSERVER_SCHEDULER_H__
+#define __COSERVER_SCHEDULER_H__
 
 #include <memory>
 #include <vector>

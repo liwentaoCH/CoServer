@@ -6,8 +6,8 @@
  * @date 2019-06-06
  * @copyright Copyright (c) 2019年 coserver.yin All rights reserved (www.coserver.top)
  */
-#ifndef __SYLAR_SOCKET_STREAM_H__
-#define __SYLAR_SOCKET_STREAM_H__
+#ifndef __COSERVER_SOCKET_STREAM_H__
+#define __COSERVER_SOCKET_STREAM_H__
 
 #include "src/stream.h"
 #include "src/socket.h"

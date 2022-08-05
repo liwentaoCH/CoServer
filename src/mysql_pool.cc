@@ -2,7 +2,7 @@
 #include "log.h"
 #include <vector>
     
-static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = COSERVER_LOG_NAME("system");
 static coserver::ConfigVar<std::string>::ptr g_url =
     coserver::Config::Lookup("db.url",std::string("192.168.138.148"), "db.url");
 
@@ -115,14 +115,14 @@ void Mysql_pool::init(std::string url, std::string User, std::string PassWord, s
 
 		if (con == NULL)
 		{
-			SYLAR_LOG_ERROR(g_logger) << "MySQL Error: mysql_init";
+			COSERVER_LOG_ERROR(g_logger) << "MySQL Error: mysql_init";
 			exit(1);
 		}
 		con = mysql_real_connect(con, url.c_str(), User.c_str(), PassWord.c_str(), DataBaseName.c_str(), Port, NULL, 0);
 
 		if (con == NULL)
 		{
-			SYLAR_LOG_ERROR(g_logger) << "MySQL Error: mysql_real_connect";
+			COSERVER_LOG_ERROR(g_logger) << "MySQL Error: mysql_real_connect";
 			exit(1);
 		}
 		connList.push_back(con);
@@ -140,12 +140,12 @@ bool Mysql_pool::Query(const char* ch, std::vector<std::vector<std::string>>& ou
     MYSQL* con = NULL;
     con = GetConnection();
     if(!con){
-        SYLAR_LOG_ERROR(g_logger) << "MySQL Error: no connection";
+        COSERVER_LOG_ERROR(g_logger) << "MySQL Error: no connection";
         return false;
     }
 
     if(mysql_query(con, ch)) {
-        SYLAR_LOG_ERROR(g_logger) << "MySQL Error: mysql_query" << "----error: " << mysql_error(con);
+        COSERVER_LOG_ERROR(g_logger) << "MySQL Error: mysql_query" << "----error: " << mysql_error(con);
         return false;
     }
 
@@ -168,12 +168,12 @@ bool Mysql_pool::Insert(const char* ch) {
     MYSQL* con = NULL;
     con = GetConnection();
     if(!con){
-        SYLAR_LOG_ERROR(g_logger) << "MySQL Error: no connection";
+        COSERVER_LOG_ERROR(g_logger) << "MySQL Error: no connection";
         return false;
     }
 
     if(mysql_query(con, ch)) {
-        SYLAR_LOG_ERROR(g_logger) << "MySQL Error: mysql_query" << "----error: " << mysql_error(con);
+        COSERVER_LOG_ERROR(g_logger) << "MySQL Error: mysql_query" << "----error: " << mysql_error(con);
         return false;
     }
     ReleaseConnection(con);
@@ -184,12 +184,12 @@ bool Mysql_pool::Delete(const char* ch) {
     MYSQL* con = NULL;
     con = GetConnection();
     if(!con){
-        SYLAR_LOG_ERROR(g_logger) << "MySQL Error: no connection";
+        COSERVER_LOG_ERROR(g_logger) << "MySQL Error: no connection";
         return false;
     }
 
     if(mysql_query(con, ch)) {
-        SYLAR_LOG_ERROR(g_logger) << "MySQL Error: mysql_query" << "----error: " << mysql_error(con);
+        COSERVER_LOG_ERROR(g_logger) << "MySQL Error: mysql_query" << "----error: " << mysql_error(con);
         return false;
     }
     ReleaseConnection(con);
@@ -200,12 +200,12 @@ bool Mysql_pool::Update(const char* ch) {
     MYSQL* con = NULL;
     con = GetConnection();
     if(!con){
-        SYLAR_LOG_ERROR(g_logger) << "MySQL Error: no connection";
+        COSERVER_LOG_ERROR(g_logger) << "MySQL Error: no connection";
         return false;
     }
 
     if(mysql_query(con, ch)) {
-        SYLAR_LOG_ERROR(g_logger) << "MySQL Error: mysql_query" << "----error: " << mysql_error(con);
+        COSERVER_LOG_ERROR(g_logger) << "MySQL Error: mysql_query" << "----error: " << mysql_error(con);
         return false;
     }
     ReleaseConnection(con);

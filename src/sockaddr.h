@@ -1,5 +1,5 @@
-#ifndef __SYLAR_ADDRESS_H__
-#define __SYLAR_ADDRESS_H__
+#ifndef __COSERVER_ADDRESS_H__
+#define __COSERVER_ADDRESS_H__
 
 #include <memory>
 #include <string>

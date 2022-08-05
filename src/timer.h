@@ -1,5 +1,5 @@
-#ifndef __SYLAR_TIMER_H__
-#define __SYLAR_TIMER_H__
+#ifndef __COSERVER_TIMER_H__
+#define __COSERVER_TIMER_H__
 
 #include <memory>
 #include <vector>

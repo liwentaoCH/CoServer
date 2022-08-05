@@ -1,8 +1,8 @@
-#ifndef __SYLAR_ENDIAN_H__
-#define __SYLAR_ENDIAN_H__
+#ifndef __COSERVER_ENDIAN_H__
+#define __COSERVER_ENDIAN_H__
 
-#define SYLAR_LITTLE_ENDIAN 1
-#define SYLAR_BIG_ENDIAN 2
+#define COSERVER_LITTLE_ENDIAN 1
+#define COSERVER_BIG_ENDIAN 2
 
 #include <byteswap.h>
 #include <stdint.h>
@@ -39,12 +39,12 @@ byteswap(T value) {
 }
 
 #if BYTE_ORDER == BIG_ENDIAN
-#define SYLAR_BYTE_ORDER SYLAR_BIG_ENDIAN
+#define COSERVER_BYTE_ORDER COSERVER_BIG_ENDIAN
 #else
-#define SYLAR_BYTE_ORDER SYLAR_LITTLE_ENDIAN
+#define COSERVER_BYTE_ORDER COSERVER_LITTLE_ENDIAN
 #endif
 
-#if SYLAR_BYTE_ORDER == SYLAR_BIG_ENDIAN
+#if COSERVER_BYTE_ORDER == COSERVER_BIG_ENDIAN
 
 /**
  * @brief 只在小端机器上执行byteswap, 在大端机器上什么都不做

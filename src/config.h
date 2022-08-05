@@ -1,5 +1,5 @@
-#ifndef __SYLAR_CONFIG_H__
-#define __SYLAR_CONFIG_H__
+#ifndef __COSERVER_CONFIG_H__
+#define __COSERVER_CONFIG_H__
 
 #include <memory>
 #include <string>
@@ -349,7 +349,7 @@ public:
             RWMutexType::ReadLock lock(m_mutex);
             return ToStr()(m_val);
         } catch (std::exception& e) {
-            SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::toString exception "
+            COSERVER_LOG_ERROR(COSERVER_LOG_ROOT()) << "ConfigVar::toString exception "
                 << e.what() << " convert: " << TypeToName<T>() << " to string"
                 << " name=" << m_name;
         }
@@ -364,7 +364,7 @@ public:
         try {
             setValue(FromStr()(val));
         } catch (std::exception& e) {
-            SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::fromString exception "
+            COSERVER_LOG_ERROR(COSERVER_LOG_ROOT()) << "ConfigVar::fromString exception "
                 << e.what() << " convert: string to " << TypeToName<T>()
                 << " name=" << m_name
                 << " - " << val;
@@ -476,10 +476,10 @@ public:
         if(it != GetDatas().end()) {
             auto tmp = std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
             if(tmp) {
-                SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name=" << name << " exists";
+                COSERVER_LOG_INFO(COSERVER_LOG_ROOT()) << "Lookup name=" << name << " exists";
                 return tmp;
             } else {
-                SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name=" << name << " exists but type not "
+                COSERVER_LOG_ERROR(COSERVER_LOG_ROOT()) << "Lookup name=" << name << " exists but type not "
                         << TypeToName<T>() << " real_type=" << it->second->getTypeName()
                         << " " << it->second->toString();
                 return nullptr;
@@ -488,7 +488,7 @@ public:
 
         if(name.find_first_not_of("abcdefghikjlmnopqrstuvwxyz._012345678")
                 != std::string::npos) {
-            SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name invalid " << name;
+            COSERVER_LOG_ERROR(COSERVER_LOG_ROOT()) << "Lookup name invalid " << name;
             throw std::invalid_argument(name);
         }
 

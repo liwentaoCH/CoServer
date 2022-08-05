@@ -1,5 +1,5 @@
-#ifndef __SYLAR_BYTEARRAY_H__
-#define __SYLAR_BYTEARRAY_H__
+#ifndef __COSERVER_BYTEARRAY_H__
+#define __COSERVER_BYTEARRAY_H__
 
 #include <memory>
 #include <string>

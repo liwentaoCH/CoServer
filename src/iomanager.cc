@@ -10,7 +10,7 @@
 
 namespace coserver {
 
-static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = COSERVER_LOG_NAME("system");
 
 enum EpollCtlOp {
 };
@@ -66,7 +66,7 @@ IOManager::FdContext::EventContext& IOManager::FdContext::getContext(IOManager::
         case IOManager::WRITE:
             return write;										// 注意这里的作用域
         default:
-            SYLAR_ASSERT2(false, "getContext");
+            COSERVER_ASSERT2(false, "getContext");
     }
     throw std::invalid_argument("getContext invalid event");
 }
@@ -78,11 +78,11 @@ void IOManager::FdContext::resetContext(EventContext& ctx) {
 }
 
 void IOManager::FdContext::triggerEvent(IOManager::Event event) {
-    //SYLAR_LOG_INFO(g_logger) << "fd=" << fd
+    //COSERVER_LOG_INFO(g_logger) << "fd=" << fd
     //    << " triggerEvent event=" << event
     //    << " events=" << events;
-    SYLAR_ASSERT(events & event);
-    //if(SYLAR_UNLIKELY(!(event & event))) {
+    COSERVER_ASSERT(events & event);
+    //if(COSERVER_UNLIKELY(!(event & event))) {
     //    return;
     //}
     events = (Event)(events & ~event);
@@ -99,10 +99,10 @@ void IOManager::FdContext::triggerEvent(IOManager::Event event) {
 IOManager::IOManager(size_t threads, bool use_caller, const std::string& name)
     :Scheduler(threads, use_caller, name) {
     m_epfd = epoll_create(5000);
-    SYLAR_ASSERT(m_epfd > 0);
+    COSERVER_ASSERT(m_epfd > 0);
 
     int rt = pipe(m_tickleFds);
-    SYLAR_ASSERT(!rt);
+    COSERVER_ASSERT(!rt);
 
     epoll_event event;
     memset(&event, 0, sizeof(epoll_event));
@@ -110,10 +110,10 @@ IOManager::IOManager(size_t threads, bool use_caller, const std::string& name)
     event.data.fd = m_tickleFds[0];
 
     rt = fcntl(m_tickleFds[0], F_SETFL, O_NONBLOCK);
-    SYLAR_ASSERT(!rt);
+    COSERVER_ASSERT(!rt);
 
     rt = epoll_ctl(m_epfd, EPOLL_CTL_ADD, m_tickleFds[0], &event);
-    SYLAR_ASSERT(!rt);
+    COSERVER_ASSERT(!rt);
 
     contextResize(32);
 
@@ -158,11 +158,11 @@ int IOManager::addEvent(int fd, Event event, std::function<void()> cb) {
     }
 
     FdContext::MutexType::Lock lock2(fd_ctx->mutex);
-    if(SYLAR_UNLIKELY(fd_ctx->events & event)) {
-        SYLAR_LOG_ERROR(g_logger) << "addEvent assert fd=" << fd
+    if(COSERVER_UNLIKELY(fd_ctx->events & event)) {
+        COSERVER_LOG_ERROR(g_logger) << "addEvent assert fd=" << fd
                     << " event=" << (EPOLL_EVENTS)event
                     << " fd_ctx.event=" << (EPOLL_EVENTS)fd_ctx->events;
-        SYLAR_ASSERT(!(fd_ctx->events & event));
+        COSERVER_ASSERT(!(fd_ctx->events & event));
     }
 
     int op = fd_ctx->events ? EPOLL_CTL_MOD : EPOLL_CTL_ADD;	
@@ -172,7 +172,7 @@ int IOManager::addEvent(int fd, Event event, std::function<void()> cb) {
 
     int rt = epoll_ctl(m_epfd, op, fd, &epevent);
     if(rt) {
-        SYLAR_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
+        COSERVER_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
             << (EpollCtlOp)op << ", " << fd << ", " << (EPOLL_EVENTS)epevent.events << "):"
             << rt << " (" << errno << ") (" << strerror(errno) << ") fd_ctx->events="
             << (EPOLL_EVENTS)fd_ctx->events;
@@ -182,7 +182,7 @@ int IOManager::addEvent(int fd, Event event, std::function<void()> cb) {
     ++m_pendingEventCount;
     fd_ctx->events = (Event)(fd_ctx->events | event);
     FdContext::EventContext& event_ctx = fd_ctx->getContext(event);
-    SYLAR_ASSERT(!event_ctx.scheduler
+    COSERVER_ASSERT(!event_ctx.scheduler
                 && !event_ctx.fiber
                 && !event_ctx.cb);
 
@@ -191,7 +191,7 @@ int IOManager::addEvent(int fd, Event event, std::function<void()> cb) {
         event_ctx.cb.swap(cb);
     } else {												//  关键点 这里
         event_ctx.fiber = Fiber::GetThis();					//  把调用该函数的作为
-        SYLAR_ASSERT2(event_ctx.fiber->getState() == Fiber::EXEC
+        COSERVER_ASSERT2(event_ctx.fiber->getState() == Fiber::EXEC
                       ,"state=" << event_ctx.fiber->getState());
     }
     return 0;
@@ -206,7 +206,7 @@ bool IOManager::delEvent(int fd, Event event) {
     lock.unlock();
 
     FdContext::MutexType::Lock lock2(fd_ctx->mutex);
-    if(SYLAR_UNLIKELY(!(fd_ctx->events & event))) {
+    if(COSERVER_UNLIKELY(!(fd_ctx->events & event))) {
         return false;
     }
 
@@ -218,7 +218,7 @@ bool IOManager::delEvent(int fd, Event event) {
 
     int rt = epoll_ctl(m_epfd, op, fd, &epevent);
     if(rt) {
-        SYLAR_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
+        COSERVER_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
             << (EpollCtlOp)op << ", " << fd << ", " << (EPOLL_EVENTS)epevent.events << "):"
             << rt << " (" << errno << ") (" << strerror(errno) << ")";
         return false;
@@ -240,7 +240,7 @@ bool IOManager::cancelEvent(int fd, Event event) {
     lock.unlock();
 
     FdContext::MutexType::Lock lock2(fd_ctx->mutex);
-    if(SYLAR_UNLIKELY(!(fd_ctx->events & event))) {
+    if(COSERVER_UNLIKELY(!(fd_ctx->events & event))) {
         return false;
     }
 
@@ -252,7 +252,7 @@ bool IOManager::cancelEvent(int fd, Event event) {
 
     int rt = epoll_ctl(m_epfd, op, fd, &epevent);
     if(rt) {
-        SYLAR_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
+        COSERVER_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
             << (EpollCtlOp)op << ", " << fd << ", " << (EPOLL_EVENTS)epevent.events << "):"
             << rt << " (" << errno << ") (" << strerror(errno) << ")";
         return false;
@@ -283,7 +283,7 @@ bool IOManager::cancelAll(int fd) {
 
     int rt = epoll_ctl(m_epfd, op, fd, &epevent);
     if(rt) {
-        SYLAR_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
+        COSERVER_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
             << (EpollCtlOp)op << ", " << fd << ", " << (EPOLL_EVENTS)epevent.events << "):"
             << rt << " (" << errno << ") (" << strerror(errno) << ")";
         return false;
@@ -298,7 +298,7 @@ bool IOManager::cancelAll(int fd) {
         --m_pendingEventCount;
     }
 
-    SYLAR_ASSERT(fd_ctx->events == 0);
+    COSERVER_ASSERT(fd_ctx->events == 0);
     return true;
 }
 
@@ -311,7 +311,7 @@ void IOManager::tickle() {
         return;
     }
     int rt = write(m_tickleFds[1], "T", 1);
-    SYLAR_ASSERT(rt == 1);
+    COSERVER_ASSERT(rt == 1);
 }
 
 bool IOManager::stopping(uint64_t& timeout) {
@@ -328,7 +328,7 @@ bool IOManager::stopping() {
 }
 
 void IOManager::idle() {
-    SYLAR_LOG_DEBUG(g_logger) << "idle";
+    COSERVER_LOG_DEBUG(g_logger) << "idle";
     const uint64_t MAX_EVNETS = 256;
     epoll_event* events = new epoll_event[MAX_EVNETS]();
     std::shared_ptr<epoll_event> shared_events(events, [](epoll_event* ptr){
@@ -337,8 +337,8 @@ void IOManager::idle() {
 
     while(true) {
         uint64_t next_timeout = 0;
-        if(SYLAR_UNLIKELY(stopping(next_timeout))) {
-            SYLAR_LOG_INFO(g_logger) << "name=" << getName()
+        if(COSERVER_UNLIKELY(stopping(next_timeout))) {
+            COSERVER_LOG_INFO(g_logger) << "name=" << getName()
                                      << " idle stopping exit";
             break;
         }
@@ -362,13 +362,13 @@ void IOManager::idle() {
         std::vector<std::function<void()> > cbs;
         listExpiredCb(cbs);
         if(!cbs.empty()) {
-            //SYLAR_LOG_DEBUG(g_logger) << "on timer cbs.size=" << cbs.size();
+            //COSERVER_LOG_DEBUG(g_logger) << "on timer cbs.size=" << cbs.size();
             schedule(cbs.begin(), cbs.end());
             cbs.clear();
         }
 
-        //if(SYLAR_UNLIKELY(rt == MAX_EVNETS)) {
-        //    SYLAR_LOG_INFO(g_logger) << "epoll wait events=" << rt;
+        //if(COSERVER_UNLIKELY(rt == MAX_EVNETS)) {
+        //    COSERVER_LOG_INFO(g_logger) << "epoll wait events=" << rt;
         //}
 
         for(int i = 0; i < rt; ++i) {
@@ -402,13 +402,13 @@ void IOManager::idle() {
 
             int rt2 = epoll_ctl(m_epfd, op, fd_ctx->fd, &event);
             if(rt2) {
-                SYLAR_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
+                COSERVER_LOG_ERROR(g_logger) << "epoll_ctl(" << m_epfd << ", "
                     << (EpollCtlOp)op << ", " << fd_ctx->fd << ", " << (EPOLL_EVENTS)event.events << "):"
                     << rt2 << " (" << errno << ") (" << strerror(errno) << ")";
                 continue;
             }
 
-            //SYLAR_LOG_INFO(g_logger) << " fd=" << fd_ctx->fd << " events=" << fd_ctx->events
+            //COSERVER_LOG_INFO(g_logger) << " fd=" << fd_ctx->fd << " events=" << fd_ctx->events
             //                         << " real_events=" << real_events;
             if(real_events & READ) {
                 fd_ctx->triggerEvent(READ);

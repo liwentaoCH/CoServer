@@ -1,5 +1,5 @@
-#ifndef __SYLAR_LOG_H__
-#define __SYLAR_LOG_H__
+#ifndef __COSERVER_LOG_H__
+#define __COSERVER_LOG_H__
 
 #include <string>
 #include <stdint.h>
@@ -17,7 +17,7 @@
 /**
  * @brief 使用流式方式将日志级别level的日志写入到logger
  */
-#define SYLAR_LOG_LEVEL(logger, level) \
+#define COSERVER_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
         coserver::LogEventWrap(coserver::LogEvent::ptr(new coserver::LogEvent(logger, level, \
                         __FILE__, __LINE__, 0, coserver::GetThreadId(),\
@@ -26,32 +26,32 @@
 /**
  * @brief 使用流式方式将日志级别debug的日志写入到logger
  */
-#define SYLAR_LOG_DEBUG(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::DEBUG)
+#define COSERVER_LOG_DEBUG(logger) COSERVER_LOG_LEVEL(logger, coserver::LogLevel::DEBUG)
 
 /**
  * @brief 使用流式方式将日志级别info的日志写入到logger
  */
-#define SYLAR_LOG_INFO(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::INFO)
+#define COSERVER_LOG_INFO(logger) COSERVER_LOG_LEVEL(logger, coserver::LogLevel::INFO)
 
 /**
  * @brief 使用流式方式将日志级别warn的日志写入到logger
  */
-#define SYLAR_LOG_WARN(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::WARN)
+#define COSERVER_LOG_WARN(logger) COSERVER_LOG_LEVEL(logger, coserver::LogLevel::WARN)
 
 /**
  * @brief 使用流式方式将日志级别error的日志写入到logger
  */
-#define SYLAR_LOG_ERROR(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::ERROR)
+#define COSERVER_LOG_ERROR(logger) COSERVER_LOG_LEVEL(logger, coserver::LogLevel::ERROR)
 
 /**
  * @brief 使用流式方式将日志级别fatal的日志写入到logger
  */
-#define SYLAR_LOG_FATAL(logger) SYLAR_LOG_LEVEL(logger, coserver::LogLevel::FATAL)
+#define COSERVER_LOG_FATAL(logger) COSERVER_LOG_LEVEL(logger, coserver::LogLevel::FATAL)
 
 /**
  * @brief 使用格式化方式将日志级别level的日志写入到logger
  */
-#define SYLAR_LOG_FMT_LEVEL(logger, level, fmt, ...) \
+#define COSERVER_LOG_FMT_LEVEL(logger, level, fmt, ...) \
     if(logger->getLevel() <= level) \
         coserver::LogEventWrap(coserver::LogEvent::ptr(new coserver::LogEvent(logger, level, \
                         __FILE__, __LINE__, 0, coserver::GetThreadId(),\
@@ -60,7 +60,7 @@
 /**
  * @brief 使用格式化方式将日志级别debug的日志写入到logger
  */
-#define SYLAR_LOG_FMT_DEBUG(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::DEBUG, fmt, __VA_ARGS__)
+#define COSERVER_LOG_FMT_DEBUG(logger, fmt, ...) COSERVER_LOG_FMT_LEVEL(logger, coserver::LogLevel::DEBUG, fmt, __VA_ARGS__)
 
 // LogEventWrap::~LogEventWrap() {
 //     m_event->getLogger()->log(m_event->getLevel(), m_event);  析构的时候输出
@@ -70,32 +70,32 @@
 /**
  * @brief 使用格式化方式将日志级别info的日志写入到logger
  */
-#define SYLAR_LOG_FMT_INFO(logger, fmt, ...)  SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::INFO, fmt, __VA_ARGS__)
+#define COSERVER_LOG_FMT_INFO(logger, fmt, ...)  COSERVER_LOG_FMT_LEVEL(logger, coserver::LogLevel::INFO, fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别warn的日志写入到logger
  */
-#define SYLAR_LOG_FMT_WARN(logger, fmt, ...)  SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::WARN, fmt, __VA_ARGS__)
+#define COSERVER_LOG_FMT_WARN(logger, fmt, ...)  COSERVER_LOG_FMT_LEVEL(logger, coserver::LogLevel::WARN, fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别error的日志写入到logger
  */
-#define SYLAR_LOG_FMT_ERROR(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::ERROR, fmt, __VA_ARGS__)
+#define COSERVER_LOG_FMT_ERROR(logger, fmt, ...) COSERVER_LOG_FMT_LEVEL(logger, coserver::LogLevel::ERROR, fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别fatal的日志写入到logger
  */
-#define SYLAR_LOG_FMT_FATAL(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, coserver::LogLevel::FATAL, fmt, __VA_ARGS__)
+#define COSERVER_LOG_FMT_FATAL(logger, fmt, ...) COSERVER_LOG_FMT_LEVEL(logger, coserver::LogLevel::FATAL, fmt, __VA_ARGS__)
 
 /**
  * @brief 获取主日志器
  */
-#define SYLAR_LOG_ROOT() coserver::LoggerMgr::GetInstance()->getRoot()
+#define COSERVER_LOG_ROOT() coserver::LoggerMgr::GetInstance()->getRoot()
 
 /**
  * @brief 获取name的日志器
  */
-#define SYLAR_LOG_NAME(name) coserver::LoggerMgr::GetInstance()->getLogger(name)
+#define COSERVER_LOG_NAME(name) coserver::LoggerMgr::GetInstance()->getLogger(name)
 
 namespace coserver {
 

@@ -7,7 +7,7 @@
 
 namespace coserver {
 
-static coserver::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static coserver::Logger::ptr g_logger = COSERVER_LOG_NAME("system");
 
 ConfigVarBase::ptr Config::LookupBase(const std::string& name) {
     RWMutexType::ReadLock lock(GetMutex());
@@ -25,7 +25,7 @@ static void ListAllMember(const std::string& prefix,
                           std::list<std::pair<std::string, const YAML::Node> >& output) {
     if(prefix.find_first_not_of("abcdefghikjlmnopqrstuvwxyz._012345678")
             != std::string::npos) {
-        SYLAR_LOG_ERROR(g_logger) << "Config invalid name: " << prefix << " : " << node;
+        COSERVER_LOG_ERROR(g_logger) << "Config invalid name: " << prefix << " : " << node;
         return;
     }
     output.push_back(std::make_pair(prefix, node));
@@ -84,10 +84,10 @@ void Config::LoadFromConfDir(const std::string& path, bool force) {
         try {
             YAML::Node root = YAML::LoadFile(i);
             LoadFromYaml(root);
-            SYLAR_LOG_INFO(g_logger) << "LoadConfFile file="
+            COSERVER_LOG_INFO(g_logger) << "LoadConfFile file="
                 << i << " ok";
         } catch (...) {
-            SYLAR_LOG_ERROR(g_logger) << "LoadConfFile file="
+            COSERVER_LOG_ERROR(g_logger) << "LoadConfFile file="
                 << i << " failed";
         }
     }

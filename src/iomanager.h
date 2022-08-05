@@ -1,5 +1,5 @@
-#ifndef __SYLAR_IOMANAGER_H__
-#define __SYLAR_IOMANAGER_H__
+#ifndef __COSERVER_IOMANAGER_H__
+#define __COSERVER_IOMANAGER_H__
 
 #include "scheduler.h"
 #include "timer.h"

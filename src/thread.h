@@ -1,5 +1,5 @@
-#ifndef __SYLAR_THREAD_H__
-#define __SYLAR_THREAD_H__
+#ifndef __COSERVER_THREAD_H__
+#define __COSERVER_THREAD_H__
 
 #include "mutex.h"
 
